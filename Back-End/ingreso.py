@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from conexion import cursor
 from fastapi import APIRouter, status, HTTPException
 
+
 ingressRouter = APIRouter()
 
 class Ingreso(BaseModel):
