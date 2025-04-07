@@ -1,0 +1,221 @@
+.imagefondoizq{
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.containerDer{
+    display: flex;
+}
+
+.recuadro2 {
+    background-color: white; 
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 6px;
+    padding: 30px;
+    margin-top: 10%;
+    margin-bottom: 20%;
+    color: black; 
+    border: 2px solid #39A900;
+}
+
+.linea-horizontal{
+    height: 4px;
+    width: 90%;
+    background-color:#39A900;
+
+}
+
+.btn {
+    color: rgb(255, 255, 255);
+    background: #39A900;
+    border-radius: 10px;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+.h1 {
+    color: #39A900;
+    display: flex;
+    font-size: 500%;
+}
+
+.imageicon{
+    bottom: 0;
+    right: 0;
+    position: fixed;
+}
+
+.linea-vertical{
+    width: 0.5%; 
+    height: 400px;
+    background-color: #39A900; 
+    margin: 0 auto; 
+}
+
+
+.Elegir_rol {
+    color: #39A900;
+}
+
+.dropdown-toggle {
+    background-color: white; 
+    border-color: gainsboro;
+    border-style: double;
+    color: #39A900; 
+    display: flex;
+    justify-content: space-between; 
+    align-items: center; 
+}
+
+.dropdown-toggle::after {
+    border-top-color: #39A900; 
+    margin-left: 10px; 
+}
+
+.dropdown-menu {
+    border-radius: 5px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    border: 1px solid #e0e0e0; 
+    margin-top: 5px; 
+}
+
+.dropdown-item:hover {
+    background-color: #39A900;
+    color: white; 
+}
+
+
+.dropdown-item {
+    color: #333; 
+    padding: 8px 16px; 
+    transition: background-color 0.3s ease, color 0.3s ease; 
+}
+
+
+.recuadro {
+    background-color: #39A900;
+    width: 100%;
+    height: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative; 
+}
+
+.cuadro-inferior1 {
+    position: absolute; 
+    top: -1%; 
+    left: 0;
+    width: 100%;
+    padding: -6px;
+    
+}
+
+
+.cuadro-inferior2 {
+    position: absolute; 
+    top: 93.1%; 
+    left: 0;
+    width: 100%;
+    padding: -10px;
+    
+}
+
+/* Estilos base para el contenedor principal del login */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Estilos base para el contenedor de la imagen */
+.logo-container {
+    margin-top: 30px;
+    text-align: center;
+    width: 100%;
+}
+
+/* Estilos base para la imagen del logo */
+.login-logo {
+    max-width: 10%;
+    height: auto;
+    margin: 0 auto;
+    display: block;
+    transform: translateY(-20%);
+}
+
+/* Media Queries para tablets (768px a 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .login-container {
+        padding: 30px;
+    }
+    
+    .login-logo {
+        max-width: 15%;
+        transform: translateY(-15%);
+    }
+}
+
+/* Media Queries para tablets pequeñas y móviles grandes (576px a 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+    .login-container {
+        padding: 25px;
+    }
+    
+    .logo-container {
+        margin-top: 25px;
+    }
+    
+    .login-logo {
+        max-width: 20%;
+        transform: translateY(-10%);
+    }
+}
+
+/* Media Queries para móviles (375px a 575px) */
+@media (min-width: 375px) and (max-width: 575px) {
+    .login-container {
+        padding: 20px 15px;
+        justify-content: flex-start;
+        padding-top: 40px;
+    }
+    
+    .logo-container {
+        margin-top: 20px;
+    }
+    
+    .login-logo {
+        max-width: 25%;
+        transform: translateY(-5%);
+    }
+}
+
+/* Media Queries para móviles pequeños (hasta 374px) */
+@media (max-width: 374px) {
+    .login-container {
+        padding: 15px 10px;
+        padding-top: 30px;
+    }
+    
+    .logo-container {
+        margin-top: 15px;
+    }
+    
+    .login-logo {
+        max-width: 30%;
+        transform: translateY(0);
+    }
+}
+
+/* Media Query para pantallas muy grandes (más de 1440px) */
+@media (min-width: 1441px) {
+    .login-logo {
+    max-width:8%;
+}
+}

@@ -1,0 +1,32 @@
+
+.recuadro {
+  background-color: #39A900;
+  width: 100%;
+  height: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative; 
+}
+
+.cuadro-inferior1 {
+  position: absolute; 
+  top: -1%; 
+  left: 0;
+  width: 100%;
+  padding: -6px;
+  
+}
+
+.cuadro-inferior2 {
+  position: absolute; 
+  top: 93.1%; 
+  left: 0;
+  width: 100%;
+  padding: -10px;
+  
+}
+
+
+
+
+
