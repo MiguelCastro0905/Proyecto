@@ -35,14 +35,30 @@ function App() {
   };
 
   return (
-    <div>
-      <Login onLogin={handleLogin} />
-      {message && (
-        <p style={{ color: message.includes('Error') ? 'red' : 'green' }}>
-          {message}
-        </p>
-      )}
-    </div>
+    <Router>
+      <div>
+        {message && (
+          <p style={{ 
+            color: message.includes('Error') ? 'red' : 'green',
+            position: 'fixed',
+            top: '20px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 1000
+          }}>
+            {message}
+          </p>
+        )}
+        <Routes>
+          <Route path="/" element={<Login onLogin={handleLogin} />} />
+          <Route path="/CarnetAprendiz" element={<CarnetAprendiz />} />
+          <Route path="/CarnetAdministrativo" element={<CarnetAdministrativo/>} />
+          <Route path="/CarnetInstructor" element={<CarnetInstructor/>} />
+          <Route path="/CarnetAdministrador" element={<CarnetAdministrador/>} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
+
 export default App;
