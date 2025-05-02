@@ -7,6 +7,19 @@ import mysql.connector
 
 userRouter = APIRouter()
 
+class CarnetUsuario(BaseModel):
+    Id_Usuario: int
+    Nombre: str
+    Apellido: str
+    Rol: str
+    Tipo_Identificacion: str
+    Numero_Identificacion: int
+    RH: str
+    ficha: int
+    Fecha_Expiracion: datetime
+    foto: str
+    CodigoQR: str
+
 class UsuarioGet(BaseModel):
     Id_Usuario: int
     Nombre: str
@@ -14,11 +27,12 @@ class UsuarioGet(BaseModel):
     Rol : str
     
 class UsuarioCrear(BaseModel):
-    Id_Usuario:int
     Nombre: str
     Apellido: str
     Correo: EmailStr
     Contraseña: str
+    TipoIdentificacion: str
+    NumeroIdentificacion: str
     Rol: str
     Edad: int
     RH: str
@@ -39,9 +53,9 @@ def validate_information(correo: str = Query(...), contrasena: str = Query(...))
     hashed_password = hashlib.sha256(contrasena.encode()).hexdigest()
     
     select_query = """
-    select Id_Usuario, Nombre, Apellido, Rol
-    FROM usuario
-    WHERE correo = %s AND contraseña = %s
+    select u.Id_Usuario, u.Nombre, u.Apellido, u.Rol, u.Tipo_Identificacion, u.Numero_Identificacion, u.RH, c.ficha, c.Fecha_Expiracion, c.foto, c.CodigoQR
+    FROM usuario u inner join carnet c on (u.Id_usuario = Fk_Id_Usuario) 
+    WHERE u.correo = %s AND u.contraseña = %s
     """
     values = (correo, hashed_password)
     
@@ -50,26 +64,23 @@ def validate_information(correo: str = Query(...), contrasena: str = Query(...))
         result = cursor.fetchone()
         
         if result:
-            usuario = UsuarioGet(
+            
+            usuario = CarnetUsuario(
                 Id_Usuario=result[0],
                 Nombre=result[1],
                 Apellido=result[2],
-                Rol=result[3]
+                Rol=result[3],
+                Tipo_Identificacion = result[4],
+                Numero_Identificacion = result[5],
+                RH = result[6],
+                ficha = result[7],
+                Fecha_Expiracion = result[8],
+                foto = result[9],
+                CodigoQR = result[10],
             )
             print(usuario)
-            
-            # Registrar el ingreso en la tabla ingreso
-            # now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # formato adecuado para DATETIME
-            # print(now)
-            # insert_ingreso = """
-            # INSERT INTO ingreso (FechaEntrada, Fk_Id_Carnet)
-            # VALUES (%s, %s)
-            # """
-            # values_ingreso = (now, usuario.Id_Usuario)
-            
-            # cursor.execute(insert_ingreso, values_ingreso)
-            # mydb.commit()
-            return {"message": "Inicio de sesión exitoso"}
+           
+            return usuario
         else:
             raise HTTPException(status_code=401, detail="Correo o contraseña incorrectos")
         
@@ -82,11 +93,13 @@ def crear_usuario(usuario: UsuarioCrear):
     hashed_password = hashlib.sha256(usuario.Contraseña.encode()).hexdigest()
 
     insert_query = """
-    INSERT INTO usuario (Id_Usuario, Nombre, Apellido, Correo, Contraseña, Rol, Edad, RH)
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+    INSERT INTO usuario 
+    (Nombre, Apellido, Correo, Contraseña, Tipo_Identificacion, Numero_Identificacion, Rol, Edad, RH)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
     """
+
     # Si el Id_Usuario es auto-incremental, no necesitas pasarlo aquí
-    values = (usuario.Id_Usuario, usuario.Nombre, usuario.Apellido, usuario.Correo, hashed_password, usuario.Rol, usuario.Edad, usuario.RH)
+    values = (usuario.Nombre, usuario.Apellido, usuario.Correo, hashed_password, usuario.TipoIdentificacion, usuario.NumeroIdentificacion, usuario.Rol, usuario.Edad, usuario.RH)
 
     try:
         cursor.execute(insert_query, values)

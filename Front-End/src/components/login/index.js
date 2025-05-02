@@ -4,50 +4,58 @@ import './index.css';
 import image1 from '../../image/LogoSENA.png';
 
 const Login = ({ onLogin }) => {
-    const [selectedRole, setSelectedRole] = useState('Elegir Rol');
-    const [correo, setCorreo] = useState('');
-    const [contrasena, setContrasena] = useState('');
+   
+    const [correo, setCorreo] = useState("");
+    const [contrasena, setContrasena] = useState("");
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
 
-    const handleRoleSelect = (role) => {
-        setSelectedRole(role);
-    };
-
     const handleLogin = async (e) => {
         e.preventDefault();
-        
-        // Validación de campos
-        if (selectedRole === 'Elegir Rol') {
-            setMessage('Por favor selecciona un rol antes de iniciar sesión');
-            return;
-        }
-        
+    
+        // Validación de campos vacíos
         if (!correo || !contrasena) {
             setMessage('Por favor, complete todos los campos.');
             return;
         }
-
+    
         try {
-            // Llamada a la API de autenticación
-            await onLogin(correo, contrasena);
-            
-            // Navegación según el rol seleccionado
-            switch (selectedRole) {
-                case 'Aprendiz':
-                    navigate('/carnetAprendiz');
-                    break;
-                case 'Instructor':
-                    navigate('/carnetInstructor');
-                    break;
-                case 'Administrativos':
-                    navigate('/carnetAdministrativo');
-                    break;
-                case 'Administrador':
-                    navigate('/carnetAdministrador');
-                    break;
-                default:
-                    setMessage('Rol no válido');
+            // Llamada al backend FastAPI
+            const url = `http://127.0.0.1:8000/login?correo=${encodeURIComponent(correo)}&contrasena=${encodeURIComponent(contrasena)}`;
+
+            const response = await fetch(url, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'  // Puedes mantenerlo aunque no envíes body
+              }
+            });
+           
+            console.log(response);
+    
+            const data = await response.json();
+    
+            if (response.ok) {
+                setMessage('Inicio de sesión exitoso');
+                console.log(data);
+                // Redirección según el rol
+                switch (data.Rol) {
+                    case 'aprendiz':
+                        navigate('/carnetAprendiz',{ state: { user: data } });
+                        break;
+                    case 'Instructor':
+                        navigate('/carnetInstructor');
+                        break;
+                    case 'Administrativos':
+                        navigate('/carnetAdministrativo');
+                        break;
+                    case 'Administrador':
+                        navigate('/carnetAdministrador');
+                        break;
+                    default:
+                        setMessage('Rol no válido');
+                }
+            } else {
+                setMessage(data.detail || 'Correo o contraseña incorrectos');
             }
         } catch (error) {
             setMessage(`Error al iniciar sesión: ${error.message}`);
@@ -69,60 +77,6 @@ const Login = ({ onLogin }) => {
                                 <div className="recuadro2 p-3">
                                     {message && <p style={{ color: 'red', textAlign: 'center' }}>{message}</p>}
                                     
-                                    {/* Dropdown para seleccionar el rol */}
-                                    <div className="row">
-                                        <div className="col-sm-12 mb-3">
-                                            <div className="dropdown">
-                                                <button
-                                                    className="btn btn-secondary dropdown-toggle w-100"
-                                                    type="button"
-                                                    id="dropdownMenuButton"
-                                                    data-bs-toggle="dropdown"
-                                                    aria-expanded="false"
-                                                >
-                                                    <div className="Elegir_rol">{selectedRole}</div>
-                                                </button>
-                                                <ul className="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
-                                                    <li>
-                                                        <a
-                                                            className="dropdown-item"
-                                                            href="#"
-                                                            onClick={() => handleRoleSelect('Aprendiz')}
-                                                        >
-                                                            Aprendiz
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a
-                                                            className="dropdown-item"
-                                                            href="#"
-                                                            onClick={() => handleRoleSelect('Instructor')}
-                                                        >
-                                                            Instructor
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a
-                                                            className="dropdown-item"
-                                                            href="#"
-                                                            onClick={() => handleRoleSelect('Administrativos')}
-                                                        >
-                                                            Administrativos
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a
-                                                            className="dropdown-item"
-                                                            href="#"
-                                                            onClick={() => handleRoleSelect('Administrador')}
-                                                        >
-                                                            Administrador
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
                                     {/* Campo de correo institucional */}
                                     <div className="row">
                                         <div className="col-sm-12 mb-3">
