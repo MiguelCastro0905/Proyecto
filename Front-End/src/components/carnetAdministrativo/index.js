@@ -1,7 +1,54 @@
-import React, { useState } from 'react';
 import './index.css';
+import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const CarnetAdministrativo = () => {
+    const location = useLocation();
+    const usuarioInfo = location.state?.user;
+    console.log(usuarioInfo.Nombre);
+
+    const [imageData, setImageData] = useState(null);
+
+    const fechaObj = new Date(usuarioInfo.Fecha_Expiracion); // Convertir string a Date
+    const fechaFormateada = fechaObj.toISOString().split('T')[0]; 
+    
+
+    useEffect(() => {
+        // Hacer la solicitud GET para obtener la imagen con el ID usando fetch
+        fetch(`http://127.0.0.1:8000/ver_foto/${usuarioInfo.Id_Usuario}`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Error al obtener la imagen');
+            }
+            return response.blob(); // Convertir la respuesta a blob
+          })
+          .then(blob => {
+            // Crear una URL para el archivo binario
+            const imageUrl = URL.createObjectURL(blob);
+            setImageData(imageUrl); // Guardar la URL generada en el estado
+          })
+          .catch(error => console.error('Error al obtener la imagen', error));
+      }, [usuarioInfo.Id_Usuario]);
+
+      const [imageDataQR, setImageDataQR] = useState(null);
+      useEffect(() => {
+        // Hacer la solicitud GET para obtener la imagen con el ID usando fetch
+        fetch(`http://127.0.0.1:8000/ver_qr/${usuarioInfo.Id_Usuario}`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Error al obtener la imagen');
+            }
+            return response.blob(); // Convertir la respuesta a blob
+          })
+          .then(blob => {
+            // Crear una URL para el archivo binario
+            const imageUrl = URL.createObjectURL(blob);
+            setImageDataQR(imageUrl); // Guardar la URL generada en el estado
+          })
+          .catch(error => console.error('Error al obtener la imagen', error));
+      }, [usuarioInfo.Id_Usuario]);
+
     const [formData, setFormData] = useState({
         nombre: '',
         apellido: '',
@@ -34,6 +81,14 @@ const CarnetAdministrativo = () => {
         }
     };
 
+
+    const navigate = useNavigate();
+
+    
+    const handleLogout = () => {
+        navigate('/');
+    };
+
     return (
         <div className="carnet-container">
         <div className="carnet-card">
@@ -45,60 +100,56 @@ const CarnetAdministrativo = () => {
             <div className="row">
                 <div className="col-md-4">
                 <div className="photo-container">
-                    {formData.foto ? (
-                    <img src={formData.foto} alt="Foto" className="photo-preview" />
-                    ) : (
-                    <div className="photo-placeholder">Foto</div>
-                    )}
-                    <input 
-                    type="file" 
-                    accept="image/*" 
-                    onChange={handleFileChange} 
-                    className="photo-input"
-                    />
+                    <div>
+                        {imageData ? (
+                            <img src={imageData} alt="Imagen del usuario" style={{ width: '100%', height: 'auto' }} />
+                        ) : (
+                            <p>Cargando imagen...</p>
+                        )}
+                    </div>
                 </div>
                 </div>
 
                 <div className="col-md-6">
                 <div className="form-group">
-                    <label>Rol:</label>
-                    <p>Administrativo</p>
+                    <label>Rol: {usuarioInfo.Rol}</label>
                 </div>
                 </div>
                 
                 <div className="col-md-8">
                 <div className="form-group">
-                    <label>Nombres:</label>
-                    <input 
-                    type="text" 
-                    name="nombre" 
-                    value={formData.nombre} 
-                    onChange={handleChange} 
-                    className="form-control"
-                    />
+                    <label>Nombres: {usuarioInfo.Nombre}</label>
                 </div>
                 
                 <div className="form-group">
-                    <label>Apellidos:</label>
-                    <input 
-                    type="text" 
-                    name="apellido" 
-                    value={formData.apellido} 
-                    onChange={handleChange} 
-                    className="form-control"
-                    />
+                    <label>Apellidos: {usuarioInfo.Apellido} </label>
+                </div>
+                <div className="form-group">
+                    <label>Tipo de identificacion: {usuarioInfo.Tipo_Identificacion} </label>
+                </div>
+                <div className="form-group">
+                    <label>Numero de identificacion: {usuarioInfo.Numero_Identificacion} </label>
+                </div>
+                <div className="form-group">
+                    <label>RH: {usuarioInfo.RH} </label>
+                </div>
+                <div className="form-group">
+                    <label>Ficha: {usuarioInfo.ficha} </label>
+                </div>
+                <div className="form-group">
+                    <label>Fecha expiracion: {fechaFormateada} </label>
                 </div>
                 <div className="row mt-3">
                 <div className="col-md-6">
                 <div className="form-group">
-                    <label>Programa:</label>
-                    <input 
-                    type="text" 
-                    name="programa" 
-                    value={formData.programa} 
-                    onChange={handleChange} 
-                    className="form-control"
-                    />
+                    <label>QR:</label>
+                    <div>
+                        {imageDataQR ? (
+                            <img src={imageDataQR} alt="QR usuario" style={{ width: '100%', height: 'auto' }} />
+                        ) : (
+                            <p>Cargando imagen...</p>
+                        )}
+                    </div>
                 </div>
                 </div>
             </div>
@@ -109,10 +160,19 @@ const CarnetAdministrativo = () => {
                 </div>
             </div>
             </div>
-            
+            {/* Botón de iniciar sesión */}
+            <div className="text-center">
+                        <button type="button" 
+                        className="btn-Exit btn-primary btn-block"
+                        onClick={handleLogout}
+                        >
+                        Cerrar sesión
+                        </button>
+                    </div>
             <div className="carnet-footer">
             <p>SENA</p>
             </div>
+            
         </div>
         </div>
     );

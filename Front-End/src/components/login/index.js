@@ -42,14 +42,14 @@ const Login = ({ onLogin }) => {
                     case 'aprendiz':
                         navigate('/carnetAprendiz',{ state: { user: data } });
                         break;
-                    case 'Instructor':
-                        navigate('/carnetInstructor');
+                    case 'instructor':
+                        navigate('/carnetInstructor', { state: { user: data } });
                         break;
-                    case 'Administrativos':
-                        navigate('/carnetAdministrativo');
+                    case 'administrativo':
+                        navigate('/carnetAdministrativo', { state: { user: data } });
                         break;
-                    case 'Administrador':
-                        navigate('/carnetAdministrador');
+                    case 'administrador':
+                        navigate('/carnetAdministrador', { state: { user: data } });
                         break;
                     default:
                         setMessage('Rol no válido');

@@ -1,6 +1,7 @@
 import './index.css';
 import { useLocation } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const CarnetAprendiz = () => {
     const location = useLocation();
@@ -80,6 +81,14 @@ const CarnetAprendiz = () => {
         }
     };
 
+
+    const navigate = useNavigate();
+
+    
+    const handleLogout = () => {
+        navigate('/');
+    };
+
     return (
         <div className="carnet-container">
         <div className="carnet-card">
@@ -153,7 +162,10 @@ const CarnetAprendiz = () => {
             </div>
             {/* Botón de iniciar sesión */}
             <div className="text-center">
-                        <button type="button" className="btn-Exit btn-primary btn-block">
+                        <button type="button" 
+                        className="btn-Exit btn-primary btn-block"
+                        onClick={handleLogout}
+                        >
                         Cerrar sesión
                         </button>
                     </div>
