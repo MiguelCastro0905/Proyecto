@@ -109,19 +109,17 @@
     top: -1%; 
     left: 0;
     width: 100%;
-    padding: -6px;
-    
+    padding: -6px;  
 }
 
 .cuadro-inferior2 {
-    position: absolute; 
-    top: 93.1%; 
-    left: 0;
+    position: fixed;
+    bottom: 0;
+    left: 0%;
     width: 100%;
-    padding: -10px;
-    
+    padding: 0%;
+    box-sizing: border-box;
 }
-
 /* Estilos base para el contenedor principal del login */
 .login-container {
     display: flex;
@@ -129,7 +127,7 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    padding: 20px;
+    padding: 5%;
     box-sizing: border-box;
 }
 
